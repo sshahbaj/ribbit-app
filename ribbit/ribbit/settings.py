@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'south',
+    'ribbit_app',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,11 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_DIRS = (
+    # Specify the location that Django needs to look to find the template files.
+    os.path.join(PROJECT_PATH, 'templates')
+)
+
 WSGI_APPLICATION = 'ribbit.wsgi.application'
 
 
@@ -82,7 +89,7 @@ WSGI_APPLICATION = 'ribbit.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(PROJECT_PATH, 'database.db'),
     }
 }
 
@@ -111,13 +118,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+# Absolute path to the directory static files should be collected to.
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 
 
 # Static files (CSS, JavaScript, Images)
