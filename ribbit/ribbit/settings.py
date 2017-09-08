@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
     'ribbit_app',
 ]
 
@@ -62,7 +61,7 @@ ROOT_URLCONF = 'ribbit.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(PROJECT_PATH, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,11 +73,6 @@ TEMPLATES = [
         },
     },
 ]
-
-TEMPLATE_DIRS = (
-    # Specify the location that Django needs to look to find the template files.
-    os.path.join(PROJECT_PATH, 'templates')
-)
 
 WSGI_APPLICATION = 'ribbit.wsgi.application'
 
