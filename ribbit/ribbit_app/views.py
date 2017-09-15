@@ -31,3 +31,36 @@ def index(request, auth_form=None, user_form=None):
         }
 
         return render(request, 'home.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticateForm(data=request.POST)
+        if form.is_valid():
+            # Success
+            login(request, form.get_user())
+            return redirect('/')
+        else:
+            # Failure
+            return index(request, auth_form=form)
+    return redirect('/')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+
+def signup(request):
+    user_form = UserCreateForm(data=request.POST)
+    if request.method == 'POST':
+        if user_form.is_valid():
+            username = user_form.clean_username()
+            password = user_form.clean_password2()
+            user_form.save()
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('/')
+        else:
+            return index(request, user_form=user_form)
+    return redirect('/')
