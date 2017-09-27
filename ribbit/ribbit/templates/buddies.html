@@ -12,6 +12,7 @@
             <form action="/submit" method="post">
             {% for field in ribbit_form %}{% csrf_token %}
             {{ field }}
+            {% endfor %}
             <input type="hidden" value="{{ next_url }}" name="next_url">
             <input type="submit" value="Ribbit!">
             </form>

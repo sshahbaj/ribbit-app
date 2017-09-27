@@ -18,7 +18,7 @@ class UserCreateForm(UserCreationForm):
         for f, error in self.errors.items():
             if f != '__all__':
                 self.fields[f].widget.attrs.update({'class': 'error', 'value': strip_tags(error)})
-            return form
+        return form
 
         class Meta:
             fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']

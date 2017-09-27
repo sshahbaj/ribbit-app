@@ -11,7 +11,17 @@ def index(request, auth_form=None, user_form=None):
         ribbit_form = RibbitForm()
         user = request.user
         ribbit_self = Ribbit.objects.filter(user=user.id)
-        ribbit_buddies = Ribbit.objects.filter(user__userprofile__in=user.profile.follows.all)
+        '''
+        user.profile will call the get_or_create function for the user, if the user exists then it will return the user.
+        Then it will check who all the user follows by using the all method.
+        So, the user.profile.follows.all() can also be written as:
+        u = user.profile
+        u.follows.all()
+        In the line user__userprofile__in, the Ribbit model has OnetoOne relationship with User model and so does the
+        UserProfile model hence the UserProfile model is the child of User model hence syntax of above lookup is:
+        parent__ChildOfParent__(continues)
+        '''
+        ribbit_buddies = Ribbit.objects.filter(user__userprofile__in=user.profile.follows.all())
         ribbits = ribbit_self | ribbit_buddies
         context = {
             'ribbit_form': ribbit_form,
@@ -55,8 +65,8 @@ def signup(request):
     user_form = UserCreateForm(data=request.POST)
     if request.method == 'POST':
         if user_form.is_valid():
-            username = user_form.clean_username()
-            password = user_form.clean_password2()
+            username = user_form.cleaned_data.get('username')
+            password = user_form.cleaned_data.get('password1')
             user_form.save()
             user = authenticate(username=username, password=password)
             login(request, user)
