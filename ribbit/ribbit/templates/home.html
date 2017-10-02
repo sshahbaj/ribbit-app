@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block login %}
     <form action="/login" method="post">{% csrf_token %}
@@ -16,7 +17,7 @@
     {{ user_form.non_field_errors }}
 </div>
 {% endif %}
-<img src="static/ribbit_app/gfx/frog.jpg">
+<img src="{% static 'ribbit_app/gfx/frog.jpg' %}">
 <div class="panel right">
     <h1>New to Ribbit?</h1>
     <p>

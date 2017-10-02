@@ -121,7 +121,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Absolute path to the directory static files should be collected to.
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+#STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 
 
 # Static files (CSS, JavaScript, Images)
