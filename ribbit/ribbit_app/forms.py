@@ -11,7 +11,7 @@ class UserCreateForm(UserCreationForm):
     last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder': 'Last Name'}))
     username = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder': 'Username'}))
     password1 = forms.CharField(required=True, widget=forms.widgets.PasswordInput(attrs={'placeholder': 'Password'}))
-    password2 = forms.CharField(required=True, widget=forms.widgets.PasswordInput(attrs={'placeholder': 'Password Confirmation'}))
+    password2 = forms.CharField(required=True, widget=forms.widgets.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
 
     def is_valid(self):
         form = super().is_valid()
@@ -20,9 +20,9 @@ class UserCreateForm(UserCreationForm):
                 self.fields[f].widget.attrs.update({'class': 'error', 'value': strip_tags(error)})
         return form
 
-        class Meta:
-            fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
-            model = User
+    class Meta:
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
+        model = User
 
 
 class AuthenticateForm(AuthenticationForm):

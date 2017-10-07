@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
 
     def gravatar_url(self):
-        return "http://www.gravatar.com/avatar/%s?s=50" % hashlib.md5(self.user.email).hexdigest()
+        return "http://www.gravatar.com/avatar/%s?s=50" % hashlib.md5(self.user.email.encode('utf-8')).hexdigest()
 
 
 '''
