@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import AuthenticateForm, UserCreateForm, RibbitForm
 from .models import Ribbit
+from django.db.models import Count
+from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index(request, auth_form=None, user_form=None):
@@ -103,3 +106,58 @@ def public(request, ribbit_form=None):
         'username': request.user.username,
     }
     return render(request, 'public.html', context)
+
+
+def get_latest(user):
+    try:
+        return user.ribbit_set.order_by('-id')[0]
+    except IndexError:
+        return ""
+
+
+@login_required
+def users(request, username="", ribbit_form=None):
+    if username:
+        # Show a profile
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+        ribbits = Ribbit.objects.filter(user=user.id)
+        if username == request.user.username or request.user.profile.follows.filter(user__username=username):
+            # Self Profile or buddies' profile
+            context ={
+                'user': user,
+                'ribbits': ribbits,
+            }
+            return render(request, 'user.html', context)
+        context = {
+            'user': user,
+            'ribbits': ribbits,
+            'follow': True,
+        }
+        return render(request, 'user.html', context)
+    users = User.objects.all().annotate(ribbit_count=Count('ribbit'))
+    ribbits = map(get_latest, users)
+    obj = zip(users, ribbits)
+    ribbit_form = ribbit_form or RibbitForm()
+    context = {
+        'obj': obj,
+        'next_url': '/users/',
+        'ribbit_form': ribbit_form,
+        'username': request.user.username,
+    }
+    return render(request, 'profiles.html', context)
+
+
+@login_required
+def follow(request):
+    if request.method == 'POST':
+        follow_id = request.POST.get('follow', False)
+        if follow_id:
+            try:
+                user = User.objects.get(id=follow_id)
+                request.user.profile.follows.add(user.profile)
+            except ObjectDoesNotExist:
+                return redirect('/users/')
+    return redirect('/users/')
