@@ -137,7 +137,7 @@ def users(request, username="", ribbit_form=None):
             'follow': True,
         }
         return render(request, 'user.html', context)
-    users = User.objects.all().annotate(ribbit_count=Count('ribbit'))
+    users = User.objects.all().annotate(Count('ribbit'))
     ribbits = map(get_latest, users)
     obj = zip(users, ribbits)
     ribbit_form = ribbit_form or RibbitForm()
